@@ -23,6 +23,7 @@ public class Main {
 				break;
 			}
 
+			// 게시물 작성
 			if (cmd.equals("article write")) {
 				articleId++;
 
@@ -31,25 +32,29 @@ public class Main {
 				System.out.printf("내용: ");
 				String content = sc.nextLine();
 
-				Article article = new Article(articleId, title, content);
+				Article article = new Article(articleId, Util.getDateStr(), title, content);
 
 				articles.add(article);
 
 				System.out.println(articleId + "번 게시물이 생성되었습니다.");
-			} else if (cmd.equals("article list")) {
+			}
+			
+			// 게시물 목록
+			else if (cmd.equals("article list")) {
 				if (articles.size() == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
 
-				System.out.println("번호	/	제목");
+				System.out.println("번호	/	제목	/	작성일");
 				for (int i = articles.size() - 1; i >= 0; i--) {
 					Article article = articles.get(i); // article 변수 자체만 프린트해보면 주소값 나옴
-					System.out.printf("%d	/	%s\n", article.id, article.title);
+					System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
 				}
 			}
 
-			else if (cmd.startsWith("article detail")) {
+			// 게시물 조회
+			else if (cmd.startsWith("article detail ")) {
 				if (cmd.split(" ").length < 3) {
 					System.out.println("게시물의 번호를 입력해주세요.");
 					continue;
@@ -71,11 +76,35 @@ public class Main {
 					continue;
 				}
 
-				System.out.println("번호: " + foundArticle.id);
-				System.out.println("제목: " + foundArticle.title);
-				System.out.println("내용: " + foundArticle.content);
+				System.out.println("번  호: " + foundArticle.id);
+				System.out.println("작성일: " + foundArticle.regDate);
+				System.out.println("제  목: " + foundArticle.title);
+				System.out.println("내  용: " + foundArticle.content);
+			}
+			
+			// 게시물 삭제
+			else if (cmd.startsWith("article delete ")) {
+				int articleNo = Integer.parseInt(cmd.split(" ")[2]);
+
+				Article foundArticle = null;
+
+				for (Article article : articles) {
+					if (article.id == articleNo) {
+						foundArticle = article;
+						break;
+					}
+				}
+
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다\n", articleNo);
+					continue;
+				}
+
+				articles.remove(foundArticle);
+				System.out.printf("%d번 게시물을 삭제했습니다.\n", articleNo);
 			}
 
+			// 명령어 입력 잘못했을 때
 			else {
 				System.out.println("존재하지 않는 명령어 입니다.");
 			}
@@ -89,12 +118,14 @@ public class Main {
 
 class Article {
 	int id;
+	String regDate;
 	String title;
 	String content;
 
 	// 생성자
-	Article(int id, String title, String content) {
+	Article(int id, String regDate, String title, String content) {
 		this.id = id;
+		this.regDate = regDate;
 		this.title = title;
 		this.content = content;
 	}
