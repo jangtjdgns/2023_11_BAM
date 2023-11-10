@@ -38,7 +38,7 @@ public class Main {
 
 				System.out.println(articleId + "번 게시물이 생성되었습니다.");
 			}
-			
+
 			// 게시물 목록
 			else if (cmd.equals("article list")) {
 				if (articles.size() == 0) {
@@ -81,7 +81,7 @@ public class Main {
 				System.out.println("제  목: " + foundArticle.title);
 				System.out.println("내  용: " + foundArticle.content);
 			}
-			
+
 			// 게시물 삭제
 			else if (cmd.startsWith("article delete ")) {
 				int articleNo = Integer.parseInt(cmd.split(" ")[2]);
@@ -96,12 +96,43 @@ public class Main {
 				}
 
 				if (foundArticle == null) {
-					System.out.printf("%d번 게시물은 존재하지 않습니다\n", articleNo);
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", articleNo);
 					continue;
 				}
 
 				articles.remove(foundArticle);
 				System.out.printf("%d번 게시물을 삭제했습니다.\n", articleNo);
+			}
+
+			// 게시물 수정
+
+			else if (cmd.startsWith("article modify ")) {
+				int articleNo = Integer.parseInt(cmd.split(" ")[2]);
+
+				Article foundArticle = null;
+
+				for (Article article : articles) {
+					if (article.id == articleNo) {
+						foundArticle = article;
+						break;
+					}
+				}
+
+				if (foundArticle == null) {
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", articleNo);
+					continue;
+				}
+				
+				System.out.printf("수정할 제목: ");
+				String title = sc.nextLine().trim();
+				System.out.printf("수정할 내용: ");
+				String content = sc.nextLine();
+				
+				foundArticle.title = title;
+				foundArticle.content = content;
+				
+				// articles.set(foundArticle.id - 1, foundArticle);   foundArticle에 article 리모컨을 가져왔기 때문에 .set 작업은 굳이 필요가없음
+				System.out.printf("%d번 게시물을 수정했습니다.\n", articleNo);
 			}
 
 			// 명령어 입력 잘못했을 때
