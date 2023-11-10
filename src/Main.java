@@ -3,12 +3,16 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+	// main과 addTestArticle에서 사용하기 위해 전역변수로 옮김 -> static 사용하여 초기화
+	static int articleId = 0;
+	static List<Article> articles = new ArrayList<>();
+
 	public static void main(String[] args) {
 		System.out.println("== 시작 ==");
 
 		Scanner sc = new Scanner(System.in);
-		int articleId = 0;
-		List<Article> articles = new ArrayList<>();
+
+		addTestArticle();
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -122,16 +126,15 @@ public class Main {
 					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", articleNo);
 					continue;
 				}
-				
+
 				System.out.printf("수정할 제목: ");
 				String title = sc.nextLine().trim();
 				System.out.printf("수정할 내용: ");
 				String content = sc.nextLine();
-				
+
 				foundArticle.title = title;
 				foundArticle.content = content;
-				
-				// articles.set(foundArticle.id - 1, foundArticle);   foundArticle에 article 리모컨을 가져왔기 때문에 .set 작업은 굳이 필요가없음
+
 				System.out.printf("%d번 게시물을 수정했습니다.\n", articleNo);
 			}
 
@@ -144,6 +147,16 @@ public class Main {
 		System.out.println(" == 끝 ==");
 
 		sc.close(); // 닫아 줘야함
+	}
+
+	private static void addTestArticle() {
+		// ++articleId -> 전위 연산자, 먼저 연산됨
+		// articleId++ -> 후위 연산자, 출력 후 연산됨
+		for (int i = 0; i < 10; i++) {
+			articles.add(new Article(++articleId, Util.getDateStr(), "제목" + articleId, "내용" + articleId));
+		}
+		
+		System.out.println("테스트용 게시물이 생성되었습니다.");
 	}
 }
 
