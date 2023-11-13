@@ -5,15 +5,20 @@ import java.util.List;
 import java.util.Scanner;
 
 import example.dto.Article;
+import example.dto.Member;
 import example.util.Util;
 
 public class App {
 	private int articleId;
+	private int memberId;
 	private List<Article> articles;
+	private List<Member> members;
 
 	App() {
-		this.articles = new ArrayList<>();
 		this.articleId = 0;
+		this.memberId = 0;
+		this.articles = new ArrayList<>();
+		this.members = new ArrayList<>();
 	}
 
 	void run() {
@@ -36,8 +41,36 @@ public class App {
 				break;
 			}
 
+			
+			
+			// 회원가입
+			if (cmd.equals("member join")) {
+				
+				// 
+				System.out.printf("아이디: ");
+				String loginId = sc.nextLine().trim();
+				System.out.printf("비밀번호: ");
+				String loginPw = sc.nextLine().trim();
+				System.out.printf("비밀번호 확인: ");
+				String PwCheck = sc.nextLine().trim();
+
+				System.out.printf("이름: ");
+				String userName = sc.nextLine().trim();
+
+				Member member = new Member(++memberId, Util.getDateStr(), loginId, loginPw, userName);
+				members.add(member);
+
+				for (Member us : members) {
+					System.out.println(us.id);
+					System.out.println(us.regDate);
+					System.out.println(us.loginId);
+					System.out.println(us.loginPw);
+					System.out.println(us.name);
+				}
+			}
+
 			// 게시물 작성
-			if (cmd.equals("article write")) {
+			else if (cmd.equals("article write")) {
 				articleId++;
 
 				System.out.printf("제목: ");
@@ -53,7 +86,7 @@ public class App {
 			}
 
 			// 게시물 목록
-			else if (cmd.startsWith("article list ")) {
+			else if (cmd.startsWith("article list")) {
 				if (this.articles.size() == 0) {
 					System.out.println("게시물이 존재하지 않습니다");
 					continue;
@@ -64,18 +97,18 @@ public class App {
 
 				if (searchkeyword.length() > 0) {
 					System.out.println("검색어: " + searchkeyword);
-					
+
 					// 검색어가 있으면 printArticles 빈 객체로 초기화
 					printArticles = new ArrayList<>();
 
 					for (Article article : articles) {
 						if (article.title.contains(searchkeyword)) {
-							printArticles.add(article);		// 검색어가 존재한 경우 백업용 printArticles에 article 추가
+							printArticles.add(article); // 검색어가 존재한 경우 백업용 printArticles에 article 추가
 						}
 					}
-					
+
 					// 검색 결과가 없을 때
-					if(printArticles.size() == 0) {
+					if (printArticles.size() == 0) {
 						System.out.println("검색결과가 없습니다.");
 						continue;
 					}
@@ -87,22 +120,6 @@ public class App {
 					Article article = printArticles.get(i);
 					System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
 				}
-
-				// 처음 시도한 방법, 좋지않음 검색어가 비어있을때 체크하려면 따로 변수를 추가해줘야함
-				// 검색어 저장
-//				String searchkeyword = cmd.substring(12).trim();
-//
-//				for (int i = this.articles.size() - 1; i >= 0; i--) {
-//					Article article = this.articles.get(i);
-//					if (searchkeyword.length() > 0) {
-//						if (article.title.contains(searchkeyword)) {
-//							System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
-//						}
-//					} else {
-//						System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
-//					}
-//				}
-
 			}
 
 			// 게시물 조회
