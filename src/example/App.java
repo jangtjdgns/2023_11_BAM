@@ -53,17 +53,56 @@ public class App {
 			}
 
 			// 게시물 목록
-			else if (cmd.equals("article list")) {
+			else if (cmd.startsWith("article list ")) {
 				if (this.articles.size() == 0) {
-					System.out.println("게시물이 존재하지 않습니다.");
+					System.out.println("게시물이 존재하지 않습니다");
 					continue;
 				}
 
-				System.out.println("번호	/	제목	/	작성일");
-				for (int i = this.articles.size() - 1; i >= 0; i--) {
-					Article article = this.articles.get(i);
+				String searchkeyword = cmd.substring("article list".length()).trim();
+				List<Article> printArticles = this.articles;
+
+				if (searchkeyword.length() > 0) {
+					System.out.println("검색어: " + searchkeyword);
+					
+					// 검색어가 있으면 printArticles 빈 객체로 초기화
+					printArticles = new ArrayList<>();
+
+					for (Article article : articles) {
+						if (article.title.contains(searchkeyword)) {
+							printArticles.add(article);		// 검색어가 존재한 경우 백업용 printArticles에 article 추가
+						}
+					}
+					
+					// 검색 결과가 없을 때
+					if(printArticles.size() == 0) {
+						System.out.println("검색결과가 없습니다.");
+						continue;
+					}
+				}
+
+				System.out.println("번호	/	제목	/		작성일");
+
+				for (int i = printArticles.size() - 1; i >= 0; i--) {
+					Article article = printArticles.get(i);
 					System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
 				}
+
+				// 처음 시도한 방법, 좋지않음 검색어가 비어있을때 체크하려면 따로 변수를 추가해줘야함
+				// 검색어 저장
+//				String searchkeyword = cmd.substring(12).trim();
+//
+//				for (int i = this.articles.size() - 1; i >= 0; i--) {
+//					Article article = this.articles.get(i);
+//					if (searchkeyword.length() > 0) {
+//						if (article.title.contains(searchkeyword)) {
+//							System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
+//						}
+//					} else {
+//						System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
+//					}
+//				}
+
 			}
 
 			// 게시물 조회
@@ -145,8 +184,8 @@ public class App {
 	}
 
 	private void addTestArticle() {
-		for (int i = 0; i < 3; i++) {
-			this.articles.add(new Article(++articleId, Util.getDateStr(), "제목" + articleId, "내용" + articleId));
+		for (int i = 0; i < 20; i++) {
+			this.articles.add(new Article(++articleId, Util.getDateStr(), "제목" + articleId * 3, "내용" + articleId * 3));
 		}
 
 		System.out.println("테스트용 게시물이 생성되었습니다.(" + this.articles.size() + "개)");
