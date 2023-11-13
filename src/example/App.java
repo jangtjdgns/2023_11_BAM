@@ -1,13 +1,22 @@
+package example;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Main {
-	// main과 addTestArticle에서 사용하기 위해 전역변수로 옮김 -> static 사용하여 초기화
-	static int articleId = 0;
-	static List<Article> articles = new ArrayList<>();
+import example.dto.Article;
+import example.util.Util;
 
-	public static void main(String[] args) {
+public class App {
+	private int articleId;
+	private List<Article> articles;
+
+	App() {
+		this.articles = new ArrayList<>();
+		this.articleId = 0;
+	}
+
+	void run() {
 		System.out.println("== 시작 ==");
 
 		Scanner sc = new Scanner(System.in);
@@ -38,21 +47,21 @@ public class Main {
 
 				Article article = new Article(articleId, Util.getDateStr(), title, content);
 
-				articles.add(article);
+				this.articles.add(article);
 
 				System.out.println(articleId + "번 게시물이 생성되었습니다.");
 			}
 
 			// 게시물 목록
 			else if (cmd.equals("article list")) {
-				if (articles.size() == 0) {
+				if (this.articles.size() == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
 
 				System.out.println("번호	/	제목	/	작성일");
-				for (int i = articles.size() - 1; i >= 0; i--) {
-					Article article = articles.get(i); // article 변수 자체만 프린트해보면 주소값 나옴
+				for (int i = this.articles.size() - 1; i >= 0; i--) {
+					Article article = this.articles.get(i);
 					System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
 				}
 			}
@@ -63,20 +72,12 @@ public class Main {
 					System.out.println("게시물의 번호를 입력해주세요.");
 					continue;
 				}
-				int articleNo = Integer.parseInt(cmd.split(" ")[2]);
+				int id = Integer.parseInt(cmd.split(" ")[2]);
 
-				// 참조형 변수 선언시에는 기본값 null, 반복문 돌릴때 해당 게시물이 있을경우 백업하기 위해 선언
-				Article foundArticle = null;
-
-				for (Article article : articles) {
-					if (article.id == articleNo) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 
 				if (foundArticle == null) {
-					System.out.println(articleNo + "번 게시물은 존재하지 않습니다.");
+					System.out.println(id + "번 게시물은 존재하지 않습니다.");
 					continue;
 				}
 
@@ -88,42 +89,27 @@ public class Main {
 
 			// 게시물 삭제
 			else if (cmd.startsWith("article delete ")) {
-				int articleNo = Integer.parseInt(cmd.split(" ")[2]);
+				int id = Integer.parseInt(cmd.split(" ")[2]);
 
-				Article foundArticle = null;
-
-				for (Article article : articles) {
-					if (article.id == articleNo) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 
 				if (foundArticle == null) {
-					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", articleNo);
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 					continue;
 				}
 
-				articles.remove(foundArticle);
-				System.out.printf("%d번 게시물을 삭제했습니다.\n", articleNo);
+				this.articles.remove(foundArticle);
+				System.out.printf("%d번 게시물을 삭제했습니다.\n", id);
 			}
 
 			// 게시물 수정
-
 			else if (cmd.startsWith("article modify ")) {
-				int articleNo = Integer.parseInt(cmd.split(" ")[2]);
+				int id = Integer.parseInt(cmd.split(" ")[2]);
 
-				Article foundArticle = null;
-
-				for (Article article : articles) {
-					if (article.id == articleNo) {
-						foundArticle = article;
-						break;
-					}
-				}
+				Article foundArticle = getArticleById(id);
 
 				if (foundArticle == null) {
-					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", articleNo);
+					System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
 					continue;
 				}
 
@@ -135,7 +121,7 @@ public class Main {
 				foundArticle.title = title;
 				foundArticle.content = content;
 
-				System.out.printf("%d번 게시물을 수정했습니다.\n", articleNo);
+				System.out.printf("%d번 게시물을 수정했습니다.\n", id);
 			}
 
 			// 명령어 입력 잘못했을 때
@@ -149,28 +135,20 @@ public class Main {
 		sc.close(); // 닫아 줘야함
 	}
 
-	private static void addTestArticle() {
-		// ++articleId -> 전위 연산자, 먼저 연산됨
-		// articleId++ -> 후위 연산자, 출력 후 연산됨
-		for (int i = 0; i < 10; i++) {
-			articles.add(new Article(++articleId, Util.getDateStr(), "제목" + articleId, "내용" + articleId));
+	private Article getArticleById(int id) {
+		for (Article article : this.articles) {
+			if (article.id == id) {
+				return article;
+			}
 		}
-		
-		System.out.println("테스트용 게시물이 생성되었습니다.");
+		return null;
 	}
-}
 
-class Article {
-	int id;
-	String regDate;
-	String title;
-	String content;
+	private void addTestArticle() {
+		for (int i = 0; i < 3; i++) {
+			this.articles.add(new Article(++articleId, Util.getDateStr(), "제목" + articleId, "내용" + articleId));
+		}
 
-	// 생성자
-	Article(int id, String regDate, String title, String content) {
-		this.id = id;
-		this.regDate = regDate;
-		this.title = title;
-		this.content = content;
+		System.out.println("테스트용 게시물이 생성되었습니다.(" + this.articles.size() + "개)");
 	}
 }
