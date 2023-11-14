@@ -46,27 +46,69 @@ public class App {
 			// 회원가입
 			if (cmd.equals("member join")) {
 				
-				// 
-				System.out.printf("아이디: ");
-				String loginId = sc.nextLine().trim();
-				System.out.printf("비밀번호: ");
-				String loginPw = sc.nextLine().trim();
-				System.out.printf("비밀번호 확인: ");
-				String PwCheck = sc.nextLine().trim();
+				String loginId = null;
+				while(true) {
+					System.out.printf("아이디: ");
+					loginId = sc.nextLine().trim();
+					
+					if(loginId.length() == 0) {
+						System.out.println("아이디는 필수 입력정보입니다.");
+						continue;
+					}
+					
+					boolean loginIdDupChk = false;
+					
+					for(Member member : this.members) {
+						if(member.loginId.equals(loginId)) {
+							loginIdDupChk = true;
+							break;
+						}
+					}
+					
+					if(loginIdDupChk) {
+						System.out.printf("%s은(는) 이미 사용중인 아이디입니다.\n", loginId);
+						continue;
+					}
+					
+					System.out.printf("%s은(는) 사용가능한 아이디입니다.\n", loginId);
+					break;
+				}
+				
+				
+				String loginPw = null;
+				while(true) {
+					System.out.printf("비밀번호: ");
+					loginPw = sc.nextLine().trim();
+					
+					if(loginPw.length() == 0) {
+						System.out.println("비밀번호는 필수 입력정보입니다.");
+						continue;
+					}
+					
+					System.out.printf("비밀번호 확인: ");
+					String loginPwChk = sc.nextLine().trim();
+					
+					if(!loginPw.equals(loginPwChk)) {
+						System.out.println("비밀번호를 다시 입력해주세요.");
+						continue;
+					}
+					break;
+				}
 
-				System.out.printf("이름: ");
-				String userName = sc.nextLine().trim();
-
+				String userName = null;
+				while(true) {
+					System.out.printf("이름: ");
+					userName = sc.nextLine().trim();
+					
+					if(userName.length() == 0) {
+						System.out.println("이름은 필수 입력정보입니다.");
+						continue;
+					}
+					break;
+				}
+				
 				Member member = new Member(++memberId, Util.getDateStr(), loginId, loginPw, userName);
 				members.add(member);
-
-				for (Member us : members) {
-					System.out.println(us.id);
-					System.out.println(us.regDate);
-					System.out.println(us.loginId);
-					System.out.println(us.loginPw);
-					System.out.println(us.name);
-				}
 			}
 
 			// 게시물 작성
