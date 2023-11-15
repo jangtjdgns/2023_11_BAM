@@ -41,7 +41,7 @@ public class MemberController extends Controller {
 	// 회원가입
 	private void doJoin() {
 
-		if (this.loginedMember != null) {
+		if (isLogined()) {
 			System.out.println("로그아웃 후 이용해주세요.");
 			return;
 		}
@@ -106,7 +106,7 @@ public class MemberController extends Controller {
 	// 로그인
 	private void doLogin() {
 
-		if (this.loginedMember != null) {
+		if (isLogined()) {
 			System.out.println("로그아웃 후 이용해주세요.");
 			return;
 		}
@@ -155,7 +155,7 @@ public class MemberController extends Controller {
 	// 로그아웃
 	private void doLogout() {
 
-		if (this.loginedMember == null) {
+		if (!isLogined()) {
 			System.out.println("로그인 후 이용해주세요.");
 			return;
 		}
@@ -182,6 +182,10 @@ public class MemberController extends Controller {
 		}
 
 		return false;
+	}
+	
+	private boolean isLogined() {
+		return this.loginedMember != null;
 	}
 
 	// 테스트용 article 생성 메서드
