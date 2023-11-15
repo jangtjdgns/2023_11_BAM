@@ -3,6 +3,7 @@ package example;
 import java.util.Scanner;
 
 import example.controller.ArticleController;
+import example.controller.Controller;
 import example.controller.MemberController;
 
 public class App {
@@ -39,16 +40,20 @@ public class App {
 			}
 				
 			String controllerName = cmdBits[0];
-			
 			String methodName = cmdBits[1];
+			
+			Controller controller = null;
 
 			if (controllerName.equals("member")) {
-				memberController.doAction(methodName, cmd);
+				controller = memberController;
 			} else if (controllerName.equals("article")) {
-				articleController.doAction(methodName, cmd);
+				controller = articleController;
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
+				continue;
 			}
+			
+			controller.doAction(methodName, cmd);
 		}
 
 		System.out.println(" == 끝 ==");

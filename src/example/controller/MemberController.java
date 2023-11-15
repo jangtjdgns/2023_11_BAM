@@ -7,7 +7,7 @@ import java.util.Scanner;
 import example.dto.Member;
 import example.util.Util;
 
-public class MemberController {
+public class MemberController extends Controller {
 	private int memberId;
 	private List<Member> members;
 	private Scanner sc;
@@ -18,6 +18,7 @@ public class MemberController {
 		this.sc = sc;
 	}
 
+	@Override
 	public void doAction(String methodName, String cmd) {
 		
 		switch(methodName) {

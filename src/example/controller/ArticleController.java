@@ -7,7 +7,7 @@ import java.util.Scanner;
 import example.dto.Article;
 import example.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller {
 	private int articleId;
 	private List<Article> articles;
 	private Scanner sc;
@@ -20,6 +20,7 @@ public class ArticleController {
 		this.cmd = null;
 	}
 
+	@Override
 	public void doAction(String methodName, String cmd) {
 		this.cmd = cmd;
 		
