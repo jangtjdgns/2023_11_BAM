@@ -7,4 +7,6 @@ public abstract class Controller {
 
 	// 추상클래스
 	public abstract void doAction(String methodName, String cmd);
+	
+	public abstract void makeTestData();
 }

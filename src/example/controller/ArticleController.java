@@ -10,7 +10,6 @@ import example.util.Util;
 public class ArticleController extends Controller {
 	private int articleId;
 	private List<Article> articles;
-	private Scanner sc;
 	private String cmd;
 
 	public ArticleController(Scanner sc) {
@@ -47,7 +46,7 @@ public class ArticleController extends Controller {
 	}
 
 	// 작성
-	public void doWrite() {
+	private void doWrite() {
 		articleId++;
 
 		System.out.printf("제목: ");
@@ -63,7 +62,7 @@ public class ArticleController extends Controller {
 	}
 
 	// 목록
-	public void showList() {
+	private void showList() {
 		if (this.articles.size() == 0) {
 			System.out.println("게시물이 존재하지 않습니다");
 			return;
@@ -100,7 +99,7 @@ public class ArticleController extends Controller {
 	}
 
 	// 조회
-	public void showDetail() {
+	private void showDetail() {
 		if (cmd.split(" ").length < 3) {
 			System.out.println("명령어를 확인해주세요.");
 			return;
@@ -122,7 +121,7 @@ public class ArticleController extends Controller {
 	}
 
 	// 삭제
-	public void doDelete() {
+	private void doDelete() {
 		if (cmd.split(" ").length < 3) {
 			System.out.println("명령어를 확인해주세요.");
 			return;
@@ -142,7 +141,7 @@ public class ArticleController extends Controller {
 	}
 
 	// 수정
-	public void doModify() {
+	private void doModify() {
 		if (cmd.split(" ").length < 3) {
 			System.out.println("명령어를 확인해주세요.");
 			return;
@@ -179,7 +178,8 @@ public class ArticleController extends Controller {
 	}
 
 	// 테스트용 article 생성 메서드
-	public void makeTestArticleData() {
+	@Override
+	public void makeTestData() {
 		for (int i = 0; i < 20; i++) {
 			this.articles.add(new Article(++articleId, Util.getDateStr(), "제목" + articleId * 3, "내용" + articleId * 3));
 		}
