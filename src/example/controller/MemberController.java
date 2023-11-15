@@ -10,12 +10,24 @@ import example.util.Util;
 public class MemberController {
 	private int memberId;
 	private List<Member> members;
-	Scanner sc;
+	private Scanner sc;
 
 	public MemberController(Scanner sc) {
 		this.memberId = 0;
 		this.members = new ArrayList<>();
 		this.sc = sc;
+	}
+
+	public void doAction(String methodName, String cmd) {
+		
+		switch(methodName) {
+		case "join":
+			doJoin();
+			break;
+		default:
+			System.out.println("존재하지 않는 명령어 입니다.");
+			break;
+		}
 	}
 
 	// 회원가입
@@ -76,7 +88,7 @@ public class MemberController {
 
 		System.out.println("회원가입 되었습니다.");
 	}
-	
+
 	private boolean isLoginIdDupChk(String loginId) {
 		for (Member member : this.members) {
 			if (member.loginId.equals(loginId)) {

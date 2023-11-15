@@ -10,12 +10,39 @@ import example.util.Util;
 public class ArticleController {
 	private int articleId;
 	private List<Article> articles;
-	Scanner sc;
+	private Scanner sc;
+	private String cmd;
 
 	public ArticleController(Scanner sc) {
 		this.articleId = 0;
 		this.articles = new ArrayList<>();
 		this.sc = sc;
+		this.cmd = null;
+	}
+
+	public void doAction(String methodName, String cmd) {
+		this.cmd = cmd;
+		
+		switch (methodName) {
+		case "write":
+			doWrite();
+			break;
+		case "list":
+			showList();
+			break;
+		case "detail":
+			showDetail();
+			break;
+		case "delete":
+			doDelete();
+			break;
+		case "modify":
+			doModify();
+			break;
+		default:
+			System.out.println("존재하지 않는 명령어 입니다.");
+			break;
+		}
 	}
 
 	// 작성
@@ -35,7 +62,7 @@ public class ArticleController {
 	}
 
 	// 목록
-	public void showList(String cmd) {
+	public void showList() {
 		if (this.articles.size() == 0) {
 			System.out.println("게시물이 존재하지 않습니다");
 			return;
@@ -72,11 +99,12 @@ public class ArticleController {
 	}
 
 	// 조회
-	public void showDetail(String cmd) {
+	public void showDetail() {
 		if (cmd.split(" ").length < 3) {
-			System.out.println("게시물의 번호를 입력해주세요.");
+			System.out.println("명령어를 확인해주세요.");
 			return;
 		}
+		
 		int id = Integer.parseInt(cmd.split(" ")[2]);
 
 		Article foundArticle = getArticleById(id);
@@ -93,7 +121,12 @@ public class ArticleController {
 	}
 
 	// 삭제
-	public void doDelete(String cmd) {
+	public void doDelete() {
+		if (cmd.split(" ").length < 3) {
+			System.out.println("명령어를 확인해주세요.");
+			return;
+		}
+		
 		int id = Integer.parseInt(cmd.split(" ")[2]);
 
 		Article foundArticle = getArticleById(id);
@@ -108,7 +141,12 @@ public class ArticleController {
 	}
 
 	// 수정
-	public void doModify(String cmd) {
+	public void doModify() {
+		if (cmd.split(" ").length < 3) {
+			System.out.println("명령어를 확인해주세요.");
+			return;
+		}
+		
 		int id = Integer.parseInt(cmd.split(" ")[2]);
 
 		Article foundArticle = getArticleById(id);
@@ -129,7 +167,6 @@ public class ArticleController {
 		System.out.printf("%d번 게시물을 수정했습니다.\n", id);
 	}
 
-	
 	// id 찾기 메서드
 	private Article getArticleById(int id) {
 		for (Article article : this.articles) {
@@ -139,7 +176,7 @@ public class ArticleController {
 		}
 		return null;
 	}
-	
+
 	// 테스트용 article 생성 메서드
 	public void makeTestArticleData() {
 		for (int i = 0; i < 20; i++) {

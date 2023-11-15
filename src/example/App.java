@@ -11,7 +11,7 @@ public class App {
 		System.out.println("== 시작 ==");
 
 		Scanner sc = new Scanner(System.in);
-		
+
 		ArticleController articleController = new ArticleController(sc);
 		MemberController memberController = new MemberController(sc);
 
@@ -29,42 +29,24 @@ public class App {
 			if (cmd.equals("exit")) {
 				break;
 			}
-			
+
 			// member와 article 분리
+			String[] cmdBits = cmd.split(" ");
+
+			if(cmdBits.length == 1) {
+				System.out.println("명령어를 확인해주세요.");
+				continue;
+			}
+				
+			String controllerName = cmdBits[0];
 			
-			// member
-			if (cmd.equals("member join")) {
-				memberController.doJoin();
-			} 
-			
-			// article
-			// 게시물 작성
-			else if (cmd.equals("article write")) {
-				articleController.doWrite();
-			}
+			String methodName = cmdBits[1];
 
-			// 게시물 목록
-			else if (cmd.startsWith("article list")) {
-				articleController.showList(cmd);
-			}
-
-			// 게시물 조회
-			else if (cmd.startsWith("article detail ")) {
-				articleController.showDetail(cmd);
-			}
-
-			// 게시물 삭제
-			else if (cmd.startsWith("article delete ")) {
-				articleController.doDelete(cmd);
-			}
-
-			// 게시물 수정
-			else if (cmd.startsWith("article modify ")) {
-				articleController.doModify(cmd);
-			}
-
-			// 명령어 입력 잘못했을 때
-			else {
+			if (controllerName.equals("member")) {
+				memberController.doAction(methodName, cmd);
+			} else if (controllerName.equals("article")) {
+				articleController.doAction(methodName, cmd);
+			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
 			}
 		}
