@@ -7,7 +7,6 @@ public class Member {
 	public String loginPw;
 	public String name;
 
-	// 생성자
 	public Member(int id, String regDate, String loginId, String loginPw, String name) {
 		this.id = id;
 		this.regDate = regDate;

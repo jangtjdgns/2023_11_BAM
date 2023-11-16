@@ -7,7 +7,6 @@ public class Article {
 	public String title;
 	public String content;
 
-	// 생성자
 	public Article(int id, String regDate, int memberId, String title, String content) {
 		this.id = id;
 		this.regDate = regDate;

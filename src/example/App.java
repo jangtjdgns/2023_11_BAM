@@ -32,16 +32,38 @@ public class App {
 				break;
 			}
 
-			// member와 article 분리
 			String[] cmdBits = cmd.split(" ");
 
-			if(cmdBits.length == 1) {
+			if (cmdBits.length == 1) {
 				System.out.println("명령어를 확인해주세요.");
 				continue;
 			}
-				
+
 			String controllerName = cmdBits[0];
 			String methodName = cmdBits[1];
+			
+			// 현재 제작한 프로그램은 methodName만으로 충분히 검증 가능하지만,
+			// 좀더 명확하게 구분하기 위해 controllerName도 구분
+			String actionName = controllerName + "/" + methodName;
+
+			switch (actionName) {
+			case "article/write":
+			case "article/delete":
+			case "article/modify":
+			case "member/logout":
+				if (!Controller.isLogined()) {
+					System.out.println("로그인 후 이용해주세요.");
+					continue;
+				}
+				break;				// break 넣어야함 안넣으면 로그아웃 불가능함
+			case "member/join":
+			case "member/login":
+				if (Controller.isLogined()) {
+					System.out.println("로그아웃 후 이용해주세요.");
+					continue;
+				}
+				break;
+			}
 			
 			Controller controller = null;
 
@@ -54,6 +76,8 @@ public class App {
 				continue;
 			}
 			
+			System.out.println(controllerName + " " + methodName);
+
 			controller.doAction(methodName, cmd);
 		}
 

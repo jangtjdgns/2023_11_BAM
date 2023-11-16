@@ -22,7 +22,7 @@ public class ArticleController extends Controller {
 	@Override
 	public void doAction(String methodName, String cmd) {
 		this.cmd = cmd;
-		
+
 		switch (methodName) {
 		case "write":
 			doWrite();
@@ -47,11 +47,6 @@ public class ArticleController extends Controller {
 
 	// 작성
 	private void doWrite() {
-		if(!isLogined()) {
-			System.out.println("로그인 후 이용해주세요.");
-			return;
-		}
-		
 		articleId++;
 
 		System.out.printf("제목: ");
@@ -99,7 +94,8 @@ public class ArticleController extends Controller {
 
 		for (int i = printArticles.size() - 1; i >= 0; i--) {
 			Article article = printArticles.get(i);
-			System.out.printf("%d	/	%s	/	%s	/	%d\n", article.id, article.regDate, article.title, article.memberId);
+			System.out.printf("%d	/	%s	/	%s	/	%d\n", article.id, article.regDate, article.title,
+					article.memberId);
 		}
 	}
 
@@ -109,7 +105,7 @@ public class ArticleController extends Controller {
 			System.out.println("명령어를 확인해주세요.");
 			return;
 		}
-		
+
 		int id = Integer.parseInt(cmd.split(" ")[2]);
 
 		Article foundArticle = getArticleById(id);
@@ -132,18 +128,18 @@ public class ArticleController extends Controller {
 			System.out.println("명령어를 확인해주세요.");
 			return;
 		}
-		
-		if(!isLogined()) {
-			System.out.println("로그인 후 이용해주세요.");
-			return;
-		}
-		
+
 		int id = Integer.parseInt(cmd.split(" ")[2]);
 
 		Article foundArticle = getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+			return;
+		}
+
+		if (foundArticle.memberId != loginedMember.id) {
+			System.out.printf("%d번 게시물에 대한 권한이 없습니다.\n", foundArticle.id);
 			return;
 		}
 
@@ -157,18 +153,18 @@ public class ArticleController extends Controller {
 			System.out.println("명령어를 확인해주세요.");
 			return;
 		}
-		
-		if(!isLogined()) {
-			System.out.println("로그인 후 이용해주세요.");
-			return;
-		}
-		
+
 		int id = Integer.parseInt(cmd.split(" ")[2]);
 
 		Article foundArticle = getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+			return;
+		}
+
+		if (foundArticle.memberId != loginedMember.id) {
+			System.out.printf("%d번 게시물에 대한 권한이 없습니다.\n", foundArticle.id);
 			return;
 		}
 
@@ -192,7 +188,7 @@ public class ArticleController extends Controller {
 		}
 		return null;
 	}
-	
+
 	// 테스트용 article 생성 메서드
 	@Override
 	public void makeTestData() {
