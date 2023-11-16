@@ -47,6 +47,11 @@ public class ArticleController extends Controller {
 
 	// 작성
 	private void doWrite() {
+		if(!isLogined()) {
+			System.out.println("로그인 후 이용해주세요.");
+			return;
+		}
+		
 		articleId++;
 
 		System.out.printf("제목: ");
@@ -54,7 +59,7 @@ public class ArticleController extends Controller {
 		System.out.printf("내용: ");
 		String content = sc.nextLine();
 
-		Article article = new Article(articleId, Util.getDateStr(), title, content);
+		Article article = new Article(articleId, Util.getDateStr(), loginedMember.id, title, content);
 
 		this.articles.add(article);
 
@@ -90,11 +95,11 @@ public class ArticleController extends Controller {
 			}
 		}
 
-		System.out.println("번호	/	제목	/		작성일");
+		System.out.println("번호	/		작성일		/	제목	/	작성자");
 
 		for (int i = printArticles.size() - 1; i >= 0; i--) {
 			Article article = printArticles.get(i);
-			System.out.printf("%d	/	%s	/	%s\n", article.id, article.title, article.regDate);
+			System.out.printf("%d	/	%s	/	%s	/	%d\n", article.id, article.regDate, article.title, article.memberId);
 		}
 	}
 
@@ -116,6 +121,7 @@ public class ArticleController extends Controller {
 
 		System.out.println("번  호: " + foundArticle.id);
 		System.out.println("작성일: " + foundArticle.regDate);
+		System.out.println("작성일: " + foundArticle.memberId);
 		System.out.println("제  목: " + foundArticle.title);
 		System.out.println("내  용: " + foundArticle.content);
 	}
@@ -124,6 +130,11 @@ public class ArticleController extends Controller {
 	private void doDelete() {
 		if (cmd.split(" ").length < 3) {
 			System.out.println("명령어를 확인해주세요.");
+			return;
+		}
+		
+		if(!isLogined()) {
+			System.out.println("로그인 후 이용해주세요.");
 			return;
 		}
 		
@@ -144,6 +155,11 @@ public class ArticleController extends Controller {
 	private void doModify() {
 		if (cmd.split(" ").length < 3) {
 			System.out.println("명령어를 확인해주세요.");
+			return;
+		}
+		
+		if(!isLogined()) {
+			System.out.println("로그인 후 이용해주세요.");
 			return;
 		}
 		
@@ -176,12 +192,12 @@ public class ArticleController extends Controller {
 		}
 		return null;
 	}
-
+	
 	// 테스트용 article 생성 메서드
 	@Override
 	public void makeTestData() {
-		for (int i = 0; i < 20; i++) {
-			this.articles.add(new Article(++articleId, Util.getDateStr(), "제목" + articleId * 3, "내용" + articleId * 3));
+		for (int i = 0; i < 5; i++) {
+			this.articles.add(new Article(++articleId, Util.getDateStr(), 1, "제목" + articleId, "내용" + articleId));
 		}
 
 		System.out.println("테스트용 게시물이 생성되었습니다.(" + this.articles.size() + "개)");

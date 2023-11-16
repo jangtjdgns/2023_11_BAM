@@ -13,11 +13,11 @@ public class App {
 
 		Scanner sc = new Scanner(System.in);
 
-		ArticleController articleController = new ArticleController(sc);
 		MemberController memberController = new MemberController(sc);
+		ArticleController articleController = new ArticleController(sc);
 
-		articleController.makeTestData();
 		memberController.makeTestData();
+		articleController.makeTestData();
 
 		while (true) {
 			System.out.printf("명령어) ");

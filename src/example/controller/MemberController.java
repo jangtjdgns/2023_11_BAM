@@ -10,18 +10,16 @@ import example.util.Util;
 public class MemberController extends Controller {
 	private int memberId;
 	private List<Member> members;
-	private Member loginedMember;
 
 	public MemberController(Scanner sc) {
 		this.memberId = 0;
 		this.members = new ArrayList<>();
 		this.sc = sc;
-		this.loginedMember = null;
 	}
 
 	@Override
 	public void doAction(String methodName, String cmd) {
-
+		
 		switch (methodName) {
 		case "join":
 			doJoin();
@@ -129,7 +127,7 @@ public class MemberController extends Controller {
 			loginPw = sc.nextLine().trim();
 
 			if (loginPw.length() == 0) {
-				System.out.println("비밀번호를를 입력해주세요.");
+				System.out.println("비밀번호를 입력해주세요.");
 				continue;
 			}
 			break;
@@ -147,7 +145,7 @@ public class MemberController extends Controller {
 			return;
 		}
 
-		this.loginedMember = member;
+		loginedMember = member;
 
 		System.out.println(member.name + "님 환영합니다.");
 	}
@@ -160,7 +158,7 @@ public class MemberController extends Controller {
 			return;
 		}
 
-		this.loginedMember = null;
+		loginedMember = null;
 		System.out.println("로그아웃 되었습니다.");
 	}
 
@@ -183,12 +181,8 @@ public class MemberController extends Controller {
 
 		return false;
 	}
-	
-	private boolean isLogined() {
-		return this.loginedMember != null;
-	}
 
-	// 테스트용 article 생성 메서드
+	// 테스트용 유저 생성 메서드
 	@Override
 	public void makeTestData() {
 		for (int i = 0; i < 3; i++) {
@@ -196,6 +190,6 @@ public class MemberController extends Controller {
 					new Member(++memberId, Util.getDateStr(), "test" + (i + 1), "test" + (i + 1), "user" + (i + 1)));
 		}
 
-		System.out.println("테스트용 게시물이 생성되었습니다.(" + this.members.size() + "개)");
+		System.out.println("테스트용 유저 생성 .(" + this.members.size() + "개)");
 	}
 }
