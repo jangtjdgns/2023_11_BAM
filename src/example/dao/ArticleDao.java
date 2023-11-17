@@ -6,16 +6,16 @@ import java.util.List;
 import example.dto.Article;
 
 public class ArticleDao extends Dao {
-	private List<Article> articles;
-
-	public ArticleDao() {
+	public List<Article> articles;
+	
+	public ArticleDao(){
 		this.articles = new ArrayList<>();
 	}
-
+	
 	public List<Article> getArticles() {
 		return this.articles;
 	}
-
+	
 	// 작성
 	public void doWrite(Article article) {
 		this.articles.add(article);
@@ -58,5 +58,5 @@ public class ArticleDao extends Dao {
 	public int getArticlesSize() {
 		return this.articles.size();
 	}
-
+	
 }

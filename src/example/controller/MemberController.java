@@ -2,16 +2,14 @@ package example.controller;
 
 import java.util.Scanner;
 
-import example.dao.MemberDao;
+import example.container.Container;
 import example.dto.Member;
 import example.util.Util;
 
 public class MemberController extends Controller {
-	private MemberDao memberDao;
 	private Scanner sc;
 	
 	public MemberController(Scanner sc) {
-		this.memberDao = new MemberDao();
 		this.sc = sc;
 	}
 
@@ -47,7 +45,7 @@ public class MemberController extends Controller {
 				continue;
 			}
 
-			if (this.memberDao.isLoginIdDupChk(loginId)) {
+			if (Container.memberDao.isLoginIdDupChk(loginId)) {
 				System.out.printf("%s은(는) 이미 사용중인 아이디입니다.\n", loginId);
 				continue;
 			}
@@ -88,8 +86,8 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		Member member = new Member(this.memberDao.getLastId(), Util.getDateStr(), loginId, loginPw, userName);
-		this.memberDao.doJoin(member);
+		Member member = new Member(Container.memberDao.getLastId(), Util.getDateStr(), loginId, loginPw, userName);
+		Container.memberDao.doJoin(member);
 
 		System.out.println("회원가입 되었습니다.");
 	}
@@ -121,7 +119,7 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		Member member = this.memberDao.getMemberByLoginId(loginId);
+		Member member = Container.memberDao.getMemberByLoginId(loginId);
 
 		if (member == null) {
 			System.out.println(loginId + "은(는) 존재하지 않는 아이디입니다.");
@@ -150,10 +148,10 @@ public class MemberController extends Controller {
 	@Override
 	public void makeTestData() {
 		for (int i = 0; i < 3; i++) {
-			this.memberDao.doJoin(
+			Container.memberDao.doJoin(
 					new Member(i + 1, Util.getDateStr(), "test" + (i + 1), "test" + (i + 1), "user" + (i + 1)));
 		}
 
-		System.out.println("테스트용 회원데이터가 생성되었습니다.(" + this.memberDao.getMembersSize() + "개)");
+		System.out.println("테스트용 회원데이터가 생성되었습니다.(" + Container.memberDao.getMembersSize() + "개)");
 	}
 }

@@ -3,15 +3,16 @@ package example.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import example.container.Container;
 import example.dto.Member;
 
 public class MemberDao extends Dao {
-	private List<Member> members;
-
+	public List<Member> members;
+	
 	public MemberDao() {
 		this.members = new ArrayList<>();
 	}
-
+	
 	public void doJoin(Member member) {
 		this.members.add(member);
 	}
@@ -37,5 +38,18 @@ public class MemberDao extends Dao {
 	// members 사이즈 확인용
 	public int getMembersSize() {
 		return this.members.size();
+	}
+
+	public List<Member> getMembers() {
+		return this.members;
+	}
+
+	public String getWriterName(int memberId) {
+		for (Member member : Container.memberDao.getMembers()) {
+			if (memberId == member.id) {
+				return member.name;
+			}
+		}
+		return null;
 	}
 }
