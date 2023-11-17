@@ -4,18 +4,21 @@ import java.util.Scanner;
 
 import example.container.Container;
 import example.dto.Member;
+import example.service.MemberService;
 import example.util.Util;
 
 public class MemberController extends Controller {
 	private Scanner sc;
-	
+	private MemberService memberService;
+
 	public MemberController(Scanner sc) {
 		this.sc = sc;
+		this.memberService = Container.memberService;
 	}
 
 	@Override
 	public void doAction(String methodName, String cmd) {
-		
+
 		switch (methodName) {
 		case "join":
 			doJoin();
@@ -86,8 +89,8 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		Member member = new Member(Container.memberDao.getLastId(), Util.getDateStr(), loginId, loginPw, userName);
-		Container.memberDao.doJoin(member);
+		Member member = new Member(memberService.getLastId(), Util.getDateStr(), loginId, loginPw, userName);
+		memberService.doJoin(member);
 
 		System.out.println("회원가입 되었습니다.");
 	}
@@ -119,7 +122,7 @@ public class MemberController extends Controller {
 			break;
 		}
 
-		Member member = Container.memberDao.getMemberByLoginId(loginId);
+		Member member = memberService.getMemberByLoginId(loginId);
 
 		if (member == null) {
 			System.out.println(loginId + "은(는) 존재하지 않는 아이디입니다.");
@@ -142,16 +145,15 @@ public class MemberController extends Controller {
 		loginedMember = null;
 		System.out.println("로그아웃 되었습니다.");
 	}
-	
 
 	// 테스트용 유저 생성 메서드
 	@Override
 	public void makeTestData() {
 		for (int i = 0; i < 3; i++) {
-			Container.memberDao.doJoin(
-					new Member(i + 1, Util.getDateStr(), "test" + (i + 1), "test" + (i + 1), "user" + (i + 1)));
+			memberService
+					.doJoin(new Member(i + 1, Util.getDateStr(), "test" + (i + 1), "test" + (i + 1), "user" + (i + 1)));
 		}
 
-		System.out.println("테스트용 회원데이터가 생성되었습니다.(" + Container.memberDao.getMembersSize() + "개)");
+		System.out.println("테스트용 회원데이터가 생성되었습니다.(" + memberService.getMembersSize() + "개)");
 	}
 }
